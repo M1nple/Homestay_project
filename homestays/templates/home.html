@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+
+    <b> {{ user.username }} </b> 
+    <br>
+    <button>
+        <a href="{% url 'user_register' %}">User Register</a>
+    </button>
+    <br>
+    <button>
+        <a href="{% url 'host_request' %}">Host Request</a>
+    </button>
+    <br>
+    </button>
+        <button>
+        <a href="{% url 'login' %}"> Login</a>
+    </button>
+    <br>
+    <a href="{% url 'logout' %}">Logout</a>
+    <br>
+    <a href="{% url 'password_reset' %}">Reset Password</a>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+</body>
+</html> 
