@@ -10,6 +10,8 @@
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value = "Login">
+        <br>
+        <a href="{% url 'password_reset' %}"> Quên mật khẩu</a>
     </form>
 </body>
 </html>

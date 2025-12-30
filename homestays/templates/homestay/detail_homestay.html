@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %} Detail Homestay {% endblock %}
+
+{% block content %}
+    <h1>Detail Homestay Page</h1>
+
+
+      <!-- Item 1 -->
+    {% for img in images %}
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+            <img src="{{ img.image.url }}" class="absolute block max-w-full h-auto -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="">
+        </div>
+    {% endfor %}
+
+    <div class="p-4 sm:ml-4">
+        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+            {% for homestay in homestays %}
+                <div class="block max-w p-6 bg-white border border-gray-200 rounded-lg shadow-sm  dark:bg-gray-800 dark:border-gray-700  flex justify-between items-center">
+                    <li><b>Tên homestay: </b>  {{homestay.name}} </li>
+                </div>
+                <div class="block max-w p-6 bg-white border border-gray-200 rounded-lg shadow-sm  dark:bg-gray-800 dark:border-gray-700  flex justify-between items-center">
+                    <li><b>Chủ sở hữu: </b> {{user.username}}</li>
+                </div>
+                <div class="block max-w p-6 bg-white border border-gray-200 rounded-lg shadow-sm  dark:bg-gray-800 dark:border-gray-700  flex justify-between items-center">
+                    <li><b>Địa chỉ: </b> {{homestay.address}}</li>
+                </div>
+                <div class="block max-w p-6 bg-white border border-gray-200 rounded-lg shadow-sm  dark:bg-gray-800 dark:border-gray-700  flex justify-between items-center">
+                    <li><b>giá 1 đêm: </b> {{homestay.price_per_night}}</li>
+                </div>
+                <div class="block max-w p-6 bg-white border border-gray-200 rounded-lg shadow-sm  dark:bg-gray-800 dark:border-gray-700  flex justify-between items-center">
+                    <li><b>Số lượng phòng: </b> {{homestay.total_rooms}}</li>
+                </div>
+                <div class="block max-w p-6 bg-white border border-gray-200 rounded-lg shadow-sm  dark:bg-gray-800 dark:border-gray-700  flex justify-between items-center">
+                    <li><b>Mô tả: </b>{{homestay.description}}</li>
+                </div>
+                <div class="block max-w p-6 bg-white border border-gray-200 rounded-lg shadow-sm  dark:bg-gray-800 dark:border-gray-700  flex justify-between items-center">
+                    <li><b>Thời gian tạo: </b> {{homestay.crated_at}}</li>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}  

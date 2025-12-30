@@ -63,7 +63,7 @@ class HostProfile(models.Model):
         related_name='host_profile'
     )
     citizen_id_number = models.CharField(max_length= 12, unique=True)
-    bank_account = models.IntegerField(max_length=20, blank=True, null=True)
+    bank_account = models.CharField(max_length=20, blank=True, null=True)
     address = models.TextField(max_length=255)
     verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

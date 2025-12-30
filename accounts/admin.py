@@ -44,10 +44,21 @@ def approve_host_request(modeladmin, request, queryset):
         host_request.reviewed_at = timezone.now()
         host_request.save()
 
+@admin.action(description="Reject selected host requests")
+def reject_host_request(modeladmin, request, queryset):
+    for host_request in queryset:
+        if host_request.status != 'PENDING':
+            continue
+
+        host_request.status = 'REJECTED'
+        host_request.reviewed_at = timezone.now()
+        host_request.save()
+
 
 @admin.register(HostRequest)
 class HostRequestAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'user',
         'citizen_id_number',
         'status',
@@ -56,15 +67,29 @@ class HostRequestAdmin(admin.ModelAdmin):
     )
     list_filter = ('status',)
     search_fields = ('user__username', 'citizen_id_number')
-    actions = [approve_host_request]
+    actions = [approve_host_request, reject_host_request]
 
 
 @admin.register(HostProfile)
 class HostProfileAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'user',
         'citizen_id_number',
         'verified',
         'created_at'
     )
     search_fields = ('user__username', 'citizen_id_number')
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = (
+        'username',
+        'email',
+        'role',
+        'is_active',
+        'is_staff',
+        'date_joined'
+    )
+    search_fields = ('username', 'email')
+    list_filter = ('role', 'is_active', 'is_staff')

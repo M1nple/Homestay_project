@@ -4,10 +4,12 @@ from . import views
 
 urlpatterns = [
     # path('', views.index, name='index'),
-    path('user_register/', views.user_register, name='user_register'),
-    path('host_request/', views.host_request, name='host_request'),
+    path('user/register/', views.user_register, name='user_register'),
+    path('host/request/', views.host_request, name='host_request'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
+
+    # Password reset URLs for built-in views
     path('password_reset/', 
          auth_views.PasswordResetView.as_view(template_name='password_reset.html'),
          name='password_reset'),
@@ -31,5 +33,8 @@ urlpatterns = [
             template_name='password_reset_complete.html'
         ),
         name='password_reset_complete'
-    )
+    ),
+
+    # path('host/pending/', host_pending_view, name='host_pending'),
+    # path('host/dashboard/', host_dashboard, name='host_dashboard'),
 ]
