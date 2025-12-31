@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
-{% block title %} Home {% endblock %}
+{% block title %} My Homestays {% endblock %}
 
 {% block content %}
+    <h1 class="text-3xl font-bold underline">Danh sách Homestay</h1>
      {% for homestay in homestays %}
             <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-                <a href="#">
+                <a href="{% url 'update_homestays' homestay.HomestayID %}">
                     {% if homestay.thumbnail %}
                         <img src="{{ homestay.thumbnail.image.url }}" class="w-full h-[200px] object-cover rounded-t-lg" alt="Ảnh Homestay">
                     {% endif %}
@@ -21,6 +22,8 @@
                     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{homestay.created_at}}</p>
                     
                 </div>
+                <button><a href="{% url 'update_homestays' homestay.HomestayID %}">Cập nhật</a></button>
+                <button><a href="#">Xóa</a></button>
             </div>
         {% endfor %}
 {% endblock %}

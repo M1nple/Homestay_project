@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import role_required, host_verified_required
@@ -6,20 +6,21 @@ from homestays.models import Homestays, HomestayImage
 from homestays.forms import HomestayForm
 from django.contrib import messages
 
-# Create your views here.
+# HOME VIEW
 def home(request):
     homestays = Homestays.objects.all()
     for homestay in homestays:
         homestay.thumbnail = homestay.images.first()
     return render(request, 'home.html', {'homestays': homestays})
 
-login_required(login_url='login')
+# HOMESTAY DETAIL VIEW
+@login_required(login_url='login')
 def detail_homestay(request, homestay_id):
-    # homestay = Homestays.objects.get(HomestayID=homestay_id)
     homestays = Homestays.objects.filter(HomestayID= homestay_id)
     images = HomestayImage.objects.filter(homestay= homestay_id)
     return render(request, 'homestay/detail_homestay.html', {'homestays': homestays, 'images': images})
 
+# HOST HOMESTAY LIST VIEW
 @login_required(login_url='login')
 @role_required('HOST')
 @host_verified_required
@@ -28,27 +29,6 @@ def host_homestay_list(request):
     for homestay in homestays:
         homestay.thumbnail = homestay.images.first()
     return render(request, 'homestay/list_homestay.html', {'homestays': homestays})
-
-@login_required(login_url='login')
-@role_required('CUSTOMER')  
-# @host_verified_required
-def test_customer_page(request):
-    if request.method == 'POST':
-        # Xử lý logic tạo homestay ở đây
-        return HttpResponse("customer page ")
-    return render(request, 'customer_page.html')
-
-@login_required(login_url='login')
-@role_required('HOST')
-@host_verified_required
-def list_homestays(request):
-    if request.method == 'POST':
-        me = request.user
-        homestays = Homestays.objects.filter(hostID=me)
-        return render(request, 'host/homestay_list.html', {'homestays': homestays})
-    return render(request, 'Host_page.html')
-
-
 
 # CREATE HOMESTAY VIEW
 @login_required(login_url='login')
@@ -74,3 +54,54 @@ def create_homestay(request):
 
     return render(request, 'homestay/create_homestay.html', {'form': form})
 
+# UPDATE HOMESTAY VIEW
+@login_required(login_url='login')
+@role_required('HOST')
+@host_verified_required
+def update_homestays(request, homestay_id):
+    homestay = get_object_or_404(Homestays, HomestayID=homestay_id, hostID=request.user)
+    if request.method == 'POST':
+        form = HomestayForm(request.POST, request.FILES, instance=homestay)
+        if form.is_valid():
+            form.save()
+
+            # Xử lý ảnh homestay
+            images = request.FILES.getlist('image')
+            for image in images:
+                HomestayImage.objects.create(homestay=homestay, image=image)
+        messages.success(request, 'Homestay updated successfully!')
+        return redirect("my_homestay")
+    else:
+        form = HomestayForm(instance=homestay)
+        context = {
+            'form': form,
+            'homestay': homestay,
+        }
+    
+    images = HomestayImage.objects.filter(homestay=homestay)
+    return render(request, 'homestay/update_homestay.html', {'images': images, **context})
+
+# DELETE IMAGE VIEW
+@login_required(login_url='login')
+@role_required('HOST')  
+@host_verified_required
+def delete_image(request, image_id):
+    image = get_object_or_404(HomestayImage, id=image_id, homestay__hostID=request.user)
+    if request.method == 'POST':
+        image.image.delete(save=False)  # Xóa file ảnh khỏi hệ thống lưu trữ
+        image.delete()
+        messages.success(request, 'Image deleted successfully!')
+        # return redirect("homestay/update_homestay.html", homestay_id=image.homestay.HomestayID)
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+ 
+# DELETE HOMESTAY VIEW
+@login_required(login_url='login')
+@role_required('HOST')  
+@host_verified_required
+def delete_homestay(request, homestay_id):
+    homestay = get_object_or_404(Homestays, HomestayID=homestay_id, hostID=request.user)
+    if request.method == 'POST':
+        homestay.delete()
+        messages.success(request, 'Homestay deleted successfully!')
+    return redirect('my_homestay')
+    # return render(request, 'homestay/delete_homestay.html', {'homestay': homestay})
