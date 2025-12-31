@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base/base.html' %}
 
 {% block title %} Home {% endblock %}
 
@@ -32,14 +32,6 @@
             <a href="{% url 'create_homestay' %}">Create Homestay</a>
         </button>
     {% endif %} 
-
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
 
     <div class="container mx-auto px-4">
     <header class="py-6 text-center">

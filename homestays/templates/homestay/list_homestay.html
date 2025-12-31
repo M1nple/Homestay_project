@@ -1,29 +1,28 @@
-{% extends 'base.html' %}
+{% extends 'base/base.html' %}
 {% block title %} My Homestays {% endblock %}
 
 {% block content %}
     <h1 class="text-3xl font-bold underline">Danh sách Homestay</h1>
-     {% for homestay in homestays %}
-            <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-                <a href="{% url 'update_homestays' homestay.HomestayID %}">
-                    {% if homestay.thumbnail %}
-                        <img src="{{ homestay.thumbnail.image.url }}" class="w-full h-[200px] object-cover rounded-t-lg" alt="Ảnh Homestay">
-                    {% endif %}
-                    <!-- <img class="rounded-t-lg" src="media/homestays/.jpg" alt="" /> -->
+    {% for homestay in homestays %}
+        <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            <a href="{% url 'update_homestays' homestay.HomestayID %}">
+                {% if homestay.thumbnail %}
+                    <img src="{{ homestay.thumbnail.image.url }}" class="w-full h-[200px] object-cover rounded-t-lg" alt="Ảnh Homestay">
+                {% endif %}
+                <!-- <img class="rounded-t-lg" src="media/homestays/.jpg" alt="" /> -->
+            </a>
+            <div class="p-5">
+                <a href="#">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{homestay.homestay_name}}</h5>
                 </a>
-                <div class="p-5">
-                    <a href="#">
-                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{homestay.homestay_name}}</h5>
-                    </a>
-                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Số phòng: {{homestay.total_rooms}}</p>
-                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Địa chỉ:{{homestay.homestay_address}} {{homestay.xa_phuong}} {{homestay.quan_huyen}} {{homestay.tinh_tp}}</p>
-                    <h6>giá tiền 1 đêm</h6>
-                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{homestay.price_per_night}} VND</p>
-                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{homestay.created_at}}</p>
-                    
-                </div>
-                <button><a href="{% url 'update_homestays' homestay.HomestayID %}">Cập nhật</a></button>
-                <button><a href="#">Xóa</a></button>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Số phòng: {{homestay.total_rooms}}</p>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Địa chỉ:{{homestay.homestay_address}} {{homestay.xa_phuong}} {{homestay.quan_huyen}} {{homestay.tinh_tp}}</p>
+                <h6>giá tiền 1 đêm</h6>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{homestay.price_per_night}} VND</p>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{homestay.created_at}}</p>
             </div>
-        {% endfor %}
+            <a href="{% url 'update_homestays' homestay.HomestayID %}" class="btn btn-secondary">Cập nhật</a>
+            <a href="{% url 'delete_homestay' homestay.HomestayID %}" class="btn btn-secondary">Xóa</a>
+        </div>
+    {% endfor %}
 {% endblock %}

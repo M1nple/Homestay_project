@@ -5,13 +5,14 @@ from accounts.decorators import role_required, host_verified_required
 from homestays.models import Homestays, HomestayImage
 from homestays.forms import HomestayForm
 from django.contrib import messages
+from django.contrib.auth import authenticate
 
 # HOME VIEW
 def home(request):
     homestays = Homestays.objects.all()
     for homestay in homestays:
         homestay.thumbnail = homestay.images.first()
-    return render(request, 'home.html', {'homestays': homestays})
+    return render(request, 'base/home.html', {'homestays': homestays})
 
 # HOMESTAY DETAIL VIEW
 @login_required(login_url='login')
@@ -101,7 +102,13 @@ def delete_image(request, image_id):
 def delete_homestay(request, homestay_id):
     homestay = get_object_or_404(Homestays, HomestayID=homestay_id, hostID=request.user)
     if request.method == 'POST':
-        homestay.delete()
-        messages.success(request, 'Homestay deleted successfully!')
-    return redirect('my_homestay')
-    # return render(request, 'homestay/delete_homestay.html', {'homestay': homestay})
+        password = request.POST.get('password')
+        user = authenticate(request, username=request.user.username, password=password)
+        if user:
+            homestay.delete()
+            messages.success(request, 'Xóa thành công!')
+            return redirect('my_homestay')
+        else:
+            messages.error(request, 'Sai mật khẩu.')
+    # return redirect('my_homestay')
+    return render(request, 'homestay/confirm_delete_homestay.html', {'homestay': homestay})   

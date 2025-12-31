@@ -10,5 +10,6 @@ urlpatterns = [
     path('host/homestay/update/<int:homestay_id>/', views.update_homestays, name='update_homestays'),
     path('host/homestay/list/', views.host_homestay_list, name='my_homestay'),
     path('host/homestay/delete/image/<int:image_id>/', views.delete_image, name='delete_image'),
+    path('host/homestay/delete/<int:homestay_id>/', views.delete_homestay, name='delete_homestay'),
     path('homestay/<int:homestay_id>/', views.detail_homestay, name='detail_homestay'),
     ]
