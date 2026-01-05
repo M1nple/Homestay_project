@@ -1,6 +1,18 @@
 {% extends 'base/base.html' %}
 
 {% block title %} Home {% endblock %}
+<style>
+    .container {
+        display: flex;
+    }
+    .container div {
+        background-color: lightgrey;
+        width: 300px;
+        border: 15px solid green;
+        padding: 50px;
+        margin: 20px;
+    }
+</style>
 
 {% block content %}
         <b> {{ user.username }} </b>  <b>{{ user.role }}</b>
@@ -33,27 +45,30 @@
         </button>
     {% endif %} 
 
-    <div class="container mx-auto px-4">
     <header class="py-6 text-center">
         <h1 class="text-3xl font-bold text-gray-900">Danh sách Homestay</h1>
     </header>
-        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">        
-            {% for homestay in homestays %}
-                <a href="{% url 'detail_homestay' homestay.HomestayID %}" class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 hover:scale-105 transition-transform duration-300">
-                    {% if homestay.thumbnail %}
-                        <img src="{{ homestay.thumbnail.image.url }}" class="w-full h-[180px] object-cover rounded-t-lg" alt="Ảnh Homestay">
-                    {% endif %}
-                    <div class="p-5">
-                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{homestay.homestay_name}}</h5>
-                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Số phòng: {{homestay.total_rooms}}</p>
-                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Địa chỉ:{{homestay.homestay_address}} {{homestay.xa_phuong}} {{homestay.quan_huyen}} {{homestay.tinh_tp}}</p>
-                        <h6>giá tiền 1 đêm</h6>
-                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{homestay.price_per_night}} VND</p>
-                        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{homestay.created_at}}</p>
-                    </div>
-                </a>
-            {% endfor %}
-        </section>
+    <div class="container mx-auto px-4" >
+        <div style="  background-color: lightgrey;width: 300px;border: 15px solid green;padding: 50px; margin: 20px; display: flex;" >
+            <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">        
+                {% for homestay in homestays %}
+                    <a href="{% url 'detail_homestay' homestay.HomestayID %}" class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 hover:scale-105 transition-transform duration-300">
+                        {% if homestay.thumbnail %}
+                            <img src="{{ homestay.thumbnail.image.url }}" style="width: 100%; height: auto;" alt="Ảnh Homestay">
+                        {% endif %}
+                        <div class="p-5">
+                            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{homestay.homestay_name}}</h5>
+                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Số phòng: {{homestay.total_rooms}}</p>
+                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Địa chỉ:{{homestay.homestay_address}} {{homestay.xa_phuong}} {{homestay.quan_huyen}} {{homestay.tinh_tp}}</p>
+                            <h6>giá tiền 1 đêm</h6>
+                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{homestay.price_per_night}} VND</p>
+                            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{homestay.created_at}}</p>
+                        </div>
+                    </a>
+                {% endfor %}
+            </section>
+        </div>
+    </div>
     <footer></footer>
 
 

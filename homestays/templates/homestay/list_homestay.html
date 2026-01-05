@@ -4,10 +4,10 @@
 {% block content %}
     <h1 class="text-3xl font-bold underline">Danh sách Homestay</h1>
     {% for homestay in homestays %}
-        <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-            <a href="{% url 'update_homestays' homestay.HomestayID %}">
+        <div style="  background-color: lightgrey;width: 300px;border: 15px solid green;padding: 50px; margin: 20px;">
+            <a href="{% url 'update_homestays' homestay.HomestayID %}" >
                 {% if homestay.thumbnail %}
-                    <img src="{{ homestay.thumbnail.image.url }}" class="w-full h-[200px] object-cover rounded-t-lg" alt="Ảnh Homestay">
+                    <img src="{{ homestay.thumbnail.image.url }}" style="width: 100%; height: auto;" alt="Ảnh Homestay">
                 {% endif %}
                 <!-- <img class="rounded-t-lg" src="media/homestays/.jpg" alt="" /> -->
             </a>
@@ -21,8 +21,18 @@
                 <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{homestay.price_per_night}} VND</p>
                 <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{homestay.created_at}}</p>
             </div>
+            <h4>Danh sách phòng:</h4>
+            <div style="display: flex; flex-direction: row; gap: 10px; margin-bottom: 10px;">
+                {% for room in rooms %}
+                    <div style="border: 1px solid black;" >
+                        <a href="{% url 'update_room' room.id %}"> <p>{{ room.room_name }}</p></a>
+                        {{room.status}}
+                    </div>
+                {% endfor %}
+            </div>
             <a href="{% url 'update_homestays' homestay.HomestayID %}" class="btn btn-secondary">Cập nhật</a>
             <a href="{% url 'delete_homestay' homestay.HomestayID %}" class="btn btn-secondary">Xóa</a>
+            <a href="{% url 'create_room' homestay.HomestayID %}" class="btn btn-secondary">Tạo phòng</a>
         </div>
     {% endfor %}
 {% endblock %}

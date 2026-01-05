@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import role_required, host_verified_required
-from homestays.models import Homestays, HomestayImage
+from homestays.models import Homestays, HomestayImage, Room
 from homestays.forms import HomestayForm
 from django.contrib import messages
 from django.contrib.auth import authenticate
@@ -27,9 +27,10 @@ def detail_homestay(request, homestay_id):
 @host_verified_required
 def host_homestay_list(request):
     homestays = Homestays.objects.filter(hostID=request.user)
+    rooms = Room.objects.filter(homestay__hostID=request.user)
     for homestay in homestays:
         homestay.thumbnail = homestay.images.first()
-    return render(request, 'homestay/list_homestay.html', {'homestays': homestays})
+    return render(request, 'homestay/list_homestay.html', {'homestays': homestays, 'rooms': rooms})
 
 # CREATE HOMESTAY VIEW
 @login_required(login_url='login')

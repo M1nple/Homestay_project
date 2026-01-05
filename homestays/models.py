@@ -51,3 +51,28 @@ class HomestayImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.homestay.name}"
+    
+
+class Room(models.Model):
+    class RoomStatus(models.TextChoices):
+        AVAILABLE = 'ava', 'Available'
+        BOOKED = 'booked', 'Booked'
+        MAINTENANCE = 'maintenance', 'Maintenance'
+        INACTIVE = 'inactive', 'Inactive'
+    id = models.BigAutoField(primary_key=True)
+    homestay = models.ForeignKey(Homestays, on_delete=models.CASCADE, related_name='rooms')
+    room_name = models.CharField(max_length=100, help_text= "Tên phòng hoặc số phòng (ví dụ: Phòng 101, Phòng Deluxe)")
+    price_per_night = models.DecimalField(max_digits=12, decimal_places=2)
+    max_guests = models.PositiveIntegerField()
+    status = models.CharField(
+        max_length=12,
+        choices=RoomStatus.choices,
+        default=RoomStatus.AVAILABLE,
+    )
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.room_name} - {self.homestay.name}"
+    

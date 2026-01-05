@@ -1,0 +1,11 @@
+{% extends 'base/base.html' %}
+{% block title %} Cập nhật phòng {% endblock %}
+{% block content %}
+    <h1 class="text-3xl font-bold underline">Cập nhật phòng</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <a href="{% url 'delete_room' room.id %}" class="btn btn-danger">Xóa</a>
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+    </form>
+{% endblock %}
