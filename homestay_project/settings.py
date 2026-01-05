@@ -44,6 +44,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'homestays',
     'accounts',
+    'booking',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
