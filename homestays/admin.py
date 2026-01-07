@@ -14,6 +14,8 @@ admin.site.site_title = "Homestay Admin Portal"
 @admin.register(Homestays)
 class HomestaysAdmin(admin.ModelAdmin):
     list_display = (
+        'HomestayID',
+        'hostID',
         'name',
         'city',
         'district',
@@ -39,6 +41,7 @@ class HomestaysAdmin(admin.ModelAdmin):
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'homestay',
         'room_name',
         'status',

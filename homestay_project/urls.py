@@ -28,6 +28,7 @@ urlpatterns = [
     path('', redirect_home),  # redirect root URL to home
     path('homestays/', include('homestays.urls')),
     path('accounts/', include('accounts.urls')),
+    path('api/', include('api.urls')),
 ]
 
 if settings.DEBUG:

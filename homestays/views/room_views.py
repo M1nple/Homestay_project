@@ -41,6 +41,7 @@ def update_room(request, room_id):
         form = RoomForm(instance=room)
     return render(request, 'room/update_room.html', {'form': form, 'room': room})
 
+# Delete Room View
 @login_required(login_url='login')
 @role_required('HOST')
 @host_verified_required

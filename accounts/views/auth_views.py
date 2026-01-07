@@ -12,11 +12,6 @@ def user_register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            # username = form.cleaned_data['username']
-            # email = form.cleaned_data['email']
-            # password = form.cleaned_data['password']
-            # confirm_password = form.cleaned_data['confirm_password']
-            # phone = form.cleaned_data['phone']
             form.save()
             messages.success(request, ("Đăng ký thành công! Vui lòng đăng nhập."))
             return redirect('login')
