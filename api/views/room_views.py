@@ -68,20 +68,3 @@ def delete_room_api(request, room_id):
         },
         status=status.HTTP_200_OK
     )
-
-
-# test view
-@api_view(['GET'])
-@permission_classes([AllowAny])
-def test_view(request, loca_id):
-    try:
-        City = City.objects.filter(id=loca_id)
-        # District = District.objects.all()
-        # Ward = Ward.objects.all()
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    return Response({
-        'City': [city.name for city in City]
-        # 'District': [district.name for district in District],
-        # 'Ward': [ward.name for ward in Ward],
-    }, status=status.HTTP_200_OK)

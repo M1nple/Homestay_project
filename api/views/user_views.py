@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from api.serializer import UserDetailSerializer, UserSerializer
 from accounts.models import User
 from api.permissions import IsAdmin
+
+# GET List Users API View
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsAdmin])
 def list_users_api(request):
@@ -13,6 +15,7 @@ def list_users_api(request):
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+# GET User Detail API View
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsAdmin])
 def user_detail_api(request, user_id):
@@ -23,6 +26,7 @@ def user_detail_api(request, user_id):
     serializer = UserDetailSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+# PUT Update User API View
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated, IsAdmin])
 def update_user_api(request, user_id):
@@ -36,3 +40,19 @@ def update_user_api(request, user_id):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# DELETE User API View
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated, IsAdmin])
+def delete_user_api(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    user.delete()
+    return Response(
+        {
+            'message': 'User deleted successfully!'
+        },
+        status=status.HTTP_200_OK
+    )

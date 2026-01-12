@@ -19,10 +19,12 @@ urlpatterns = [
     path('room/', views.get_all_rooms_api, name='get_all_rooms_api'),
     path('room/update/<int:room_id>/', views.update_room_api, name='update_room_api'),
     path('room/delete/<int:room_id>/', views.delete_room_api, name='delete_room_api'),
-    path('test/<int:loca_id>/', views.test_view, name='test_view'),
 
     # User URLs
     path('users/', views.list_users_api, name='list_users_api'),
+    path('users/<int:user_id>/', views.user_detail_api, name='user_detail_api'),
+    path('users/update/<int:user_id>/', views.update_user_api, name='update_user_api'),
+    path('users/delete/<int:user_id>/', views.delete_user_api, name='delete_user_api'),
 
 ]
 
