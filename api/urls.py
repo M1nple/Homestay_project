@@ -14,9 +14,11 @@ urlpatterns = [
     path('homestay/<int:homestay_id>/', views.get_homestay_details_api, name='get_homestay_details_api'),
     path('homestay/update/<int:homestay_id>/', views.update_homestay_api, name='update_homestay_api'),
     path('homestay/delete/<int:homestay_id>/', views.delete_homestay_api, name='delete_homestay_api'),
+    path('homestay/host/', views.get_host_homestays_api, name='get_host_homestays_api'),
     # Room URLs
     path('room/create/<int:homestay_id>/', views.create_room_api, name='create_room_api'),
     path('room/', views.get_all_rooms_api, name='get_all_rooms_api'),
+    path('room/host/', views.get_host_rooms_api, name='get_host_rooms_api'),
     path('room/update/<int:room_id>/', views.update_room_api, name='update_room_api'),
     path('room/delete/<int:room_id>/', views.delete_room_api, name='delete_room_api'),
 
@@ -26,6 +28,15 @@ urlpatterns = [
     path('users/update/<int:user_id>/', views.update_user_api, name='update_user_api'),
     path('users/delete/<int:user_id>/', views.delete_user_api, name='delete_user_api'),
 
+    # Booking URLs
+    path('booking/<int:room_id>/create/', views.create_booking_api, name='create_booking_api'),
+    path('booking/', views.get_all_bookings_api, name='get_all_bookings_api'),
+    path('booking/customer/', views.get_customer_bookings_api, name='get_customer_bookings_api'),
+    path('booking/update/<int:booking_id>/', views.update_booking_api, name='update_booking_api'),
+    path('booking/cancel/<int:booking_id>/', views.cancel_booking_api, name='cancel_booking_api'),
+    # Booking management by Host
+    path('booking/<int:booking_id>/accept/', views.accept_booking_api, name='accept_booking_api'),
+    path('booking/<int:booking_id>/reject/', views.reject_booking_api, name='reject_booking_api'),
 ]
 
 

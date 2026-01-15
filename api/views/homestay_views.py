@@ -1,12 +1,10 @@
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 from rest_framework import status
-from api.serializer import HomestaySerializer
 from homestays.models import Homestays
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from django.contrib.auth import authenticate, login
+from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
+from api.serializers.homestay_serializer import HomestaySerializer
 
 from api.permissions import IsHost
 
@@ -18,8 +16,17 @@ def get_all_homestays_api(request):
     serialaizer = HomestaySerializer(homestay, many=True)
     return Response(serialaizer.data, status=status.HTTP_200_OK)
 
+# GET Host Homestays API View
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsHost])
+def get_host_homestays_api(request):
+    homestays = Homestays.objects.filter(hostID=request.user)
+    serializer = HomestaySerializer(homestays, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 # GET Homestay Details API View
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_homestay_details_api(request, homestay_id):
     try:
         homestay = Homestays.objects.get(HomestayID=homestay_id)

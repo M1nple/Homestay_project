@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from api.serializer import UserDetailSerializer, UserSerializer
+from api.serializers.user_serializer import UserSerializer, UserDetailSerializer
 from accounts.models import User
 from api.permissions import IsAdmin
 
