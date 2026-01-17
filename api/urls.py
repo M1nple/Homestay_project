@@ -17,7 +17,7 @@ urlpatterns = [
     path('homestay/host/', views.get_host_homestays_api, name='get_host_homestays_api'),
     # Room URLs
     path('room/create/<int:homestay_id>/', views.create_room_api, name='create_room_api'),
-    path('room/', views.get_all_rooms_api, name='get_all_rooms_api'),
+    path('room/<int:homestay_id>/', views.get_room_by_homestay_api, name='get_room_by_homestay_api'),
     path('room/host/', views.get_host_rooms_api, name='get_host_rooms_api'),
     path('room/update/<int:room_id>/', views.update_room_api, name='update_room_api'),
     path('room/delete/<int:room_id>/', views.delete_room_api, name='delete_room_api'),
@@ -37,6 +37,9 @@ urlpatterns = [
     # Booking management by Host
     path('booking/<int:booking_id>/accept/', views.accept_booking_api, name='accept_booking_api'),
     path('booking/<int:booking_id>/reject/', views.reject_booking_api, name='reject_booking_api'),
+
+    # Search URL
+    path('rooms/search/', views.room_available_api, name='search_rooms_api'),
 ]
 
 

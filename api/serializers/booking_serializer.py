@@ -11,11 +11,37 @@ class BookingCreateSerializer(serializers.ModelSerializer):
             'created_at'
         ]
     def validate(self, data):
-        checkin_date = data.get('checkin_date')
-        checkout_date = data.get('checkout_date')
-        if checkout_date <= checkin_date:
+        checkin = data.get('checkin_date')
+        checkout = data.get('checkout_date')
+        guests = data.get('guests')
+        room = self.context['room']
+
+        # kiểm tra ngày nhận và ngày trả
+        if checkin and checkout and checkout <= checkin:
             raise serializers.ValidationError("Ngày trả phòng phải sau ngày nhận phòng.")
+        
+        # kiểm tra số lượng khách
+        if guests and guests > room.max_guests:
+            raise serializers.ValidationError(f"Số lượng khách vượt quá sức chứa tối đa của phòng ({room.max_guests} khách).")
+        
+        # kiểm tra trùng lịch đặt phòng
+        if checkin and checkout:
+            exists = Booking.objects.filter( 
+                room_id=room,
+                status__in=['CONFIRMED'],
+                checkin_date__lt=checkout, # LT = less than (<) 
+                checkout_date__gt=checkin # GT = greater than (>) kiểm tra giao nhau của hai khoảng thời gian với nhau trong database và yêu cầu mới tạo
+            ).exists()
+            if exists:
+                raise serializers.ValidationError("Phòng đã được đặt trong khoảng thời gian này.")
         return data
+    
+    def create(self, validated_data):
+        room = self.context['room']
+        user = self.context['request'].user
+        days = (validated_data['checkout_date'] - validated_data['checkin_date']).days
+        total_price = days * room.price_per_night
+        return Booking.objects.create(user_id = user, room_id = room, total_price=total_price, **validated_data)
     
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:

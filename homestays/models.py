@@ -55,7 +55,7 @@ class HomestayImage(models.Model):
 
 class Room(models.Model):
     class RoomStatus(models.TextChoices):
-        AVAILABLE = 'ava', 'Available'
+        AVAILABLE = 'available', 'Available'
         BOOKED = 'booked', 'Booked'
         MAINTENANCE = 'maintenance', 'Maintenance'
         INACTIVE = 'inactive', 'Inactive'

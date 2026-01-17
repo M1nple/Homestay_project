@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.response import Response
 from rest_framework import status
 from homestays.models import Homestays
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.views.decorators.csrf import csrf_exempt
 from api.serializers.homestay_serializer import HomestaySerializer
 
@@ -11,6 +11,7 @@ from api.permissions import IsHost
 
 # GET All Homestays API View
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def get_all_homestays_api(request):
     homestay = Homestays.objects.all()
     serialaizer = HomestaySerializer(homestay, many=True)

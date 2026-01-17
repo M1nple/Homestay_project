@@ -64,14 +64,14 @@ def get_customer_bookings_api(request):
 @permission_classes([IsAuthenticated])
 def create_booking_api(request, room_id):
     room = get_object_or_404(Room, id=room_id)
-    serializer = BookingCreateSerializer(data=request.data)
+    serializer = BookingCreateSerializer(
+        data=request.data, 
+        context={'room': room, 'request': request}
+        )
     if serializer.is_valid():
-        days = (serializer.validated_data['checkout_date'] - serializer.validated_data['checkin_date']).days
-        total_price = days * room.price_per_night
         serializer.save(
-            user_id =request.user,
-            room_id =room,
-            total_price=total_price,
+            # user_id =request.user,
+            # room_id =room,
         )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -91,8 +91,6 @@ def update_booking_api(request, booking_id):
         checkin = serializer.validated_data.get('checkin_date', booking.checkin_date)
         checkout = serializer.validated_data.get('checkout_date', booking.checkout_date)
         days = (checkout - checkin).days
-        if days <= 0:
-            return Response({'error': 'Ngày trả phòng phải sau ngày nhận phòng.'}, status=status.HTTP_400_BAD_REQUEST)
         total_price = days * room.price_per_night
         serializer.save(total_price=total_price)
         return Response(

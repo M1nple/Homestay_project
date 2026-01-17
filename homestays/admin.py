@@ -44,6 +44,7 @@ class RoomAdmin(admin.ModelAdmin):
         'id',
         'homestay',
         'room_name',
+        'max_guests',
         'status',
     )
     search_fields = (

@@ -7,6 +7,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
 
 from api.permissions import IsHost
 
@@ -27,15 +28,15 @@ def create_room_api(request, homestay_id):
         )
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# GET room API View
+# GET room by homestay API View
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def get_all_rooms_api(request):
-    room = Room.objects.all()
+def get_room_by_homestay_api(request, homestay_id):
+    room = Room.objects.filter(homestay_id=homestay_id)
     serializer = RoomSerializer(room, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-#
+# GET Host Rooms API View
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsHost])
 def get_host_rooms_api(request):
@@ -80,3 +81,26 @@ def delete_room_api(request, room_id):
         status=status.HTTP_200_OK
     )
 
+# search room available api view
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def room_available_api(request):
+    checkin = request.GET.get('checkin')
+    checkout = request.GET.get('checkout')
+    guests = request.GET.get('guests')
+
+    rooms = Room.objects.filter(status= Room.RoomStatus.AVAILABLE)
+
+    if guests: 
+        rooms = rooms.filter(max_guests__gte=int(guests))
+        
+    if checkin and checkout:
+        checkin = datetime.strptime(checkin, '%Y-%m-%d').date()
+        checkout = datetime.strptime(checkout, '%Y-%m-%d').date()
+        rooms = rooms.exclude(  # dùng exclude để lọc bỏ ra những phòng đã được đặt trong khoảng thời gian này, còn filter sẽ lấy những phòng đã được đặt
+            booking__status='CONFIRMED',
+            booking__checkin_date__lt=checkout,
+            booking__checkout_date__gt=checkin
+        ).distinct()
+    serializer = RoomSerializer(rooms, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)

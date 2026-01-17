@@ -12,22 +12,19 @@
                 <!-- <img class="rounded-t-lg" src="media/homestays/.jpg" alt="" /> -->
             </a>
             <div class="p-5">
-                <!-- <a href="{% url 'update_homestays' homestay.HomestayID %}"> -->
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{homestay.homestay_name}}</h5>
-                </a>
-                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Số phòng: {{homestay.total_rooms}}</p>
-                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Địa chỉ:{{homestay.homestay_address}} {{homestay.xa_phuong}} {{homestay.quan_huyen}} {{homestay.tinh_tp}}</p>
-                <h6>giá tiền 1 đêm</h6>
-                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{homestay.price_per_night}} VND</p>
-                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{homestay.created_at}}</p>
+                <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Tên: {{homestay.name}}</h2>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Địa chỉ: {{homestay.address}}, {{homestay.city}}, {{homestay.district}}, {{homestay.ward}}</p>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400"> giá tiền 1 đêm: {{homestay.price_per_night}} VND</p>
             </div>
             <h4>Danh sách phòng:</h4>
             <div style="display: flex; flex-direction: row; gap: 10px; margin-bottom: 10px;">
                 {% for room in rooms %}
-                    <div style="border: 1px solid black;" >
-                        <a href="{% url 'update_room' room.id %}"> <p>{{ room.room_name }}</p></a>
-                        {{room.status}}
-                    </div>
+                    {% if room.homestay.HomestayID == homestay.HomestayID %}
+                        <div style="border: 1px solid black;" >
+                            <a href="{% url 'update_room' room.id %}"> <p>{{ room.room_name }}</p></a>
+                            {{room.status}}
+                        </div>
+                    {% endif %}
                 {% endfor %}
             </div>
             <a href="{% url 'update_homestays' homestay.HomestayID %}" class="btn btn-secondary">Cập nhật</a>
