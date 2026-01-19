@@ -48,7 +48,6 @@ def reject_booking_api(request, booking_id):
     booking.save()
     return Response({'message': 'Booking đã bị từ chối.'}, status=status.HTTP_200_OK)
 
-
 # CUSTOMER
 # GET booking by customer API View
 @api_view(['GET'])

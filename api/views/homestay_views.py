@@ -1,10 +1,13 @@
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import api_view, permission_classes, parser_classes
 from rest_framework.response import Response
 from rest_framework import status
-from homestays.models import Homestays
+from homestays.models import Homestays, HomestayImage
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.parsers import MultiPartParser, FormParser
 from django.views.decorators.csrf import csrf_exempt
 from api.serializers.homestay_serializer import HomestaySerializer
+
+
 
 from api.permissions import IsHost
 
@@ -40,31 +43,39 @@ def get_homestay_details_api(request, homestay_id):
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, IsHost])
+@parser_classes([MultiPartParser, FormParser])
 def create_homestay_api(request):
-        serializer = HomestaySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save( hostID=request.user)  
-            return Response(
-                {
-                    'message': 'Homestay created successfully!',
-                    'data': serializer.data
-                },
-                status=status.HTTP_201_CREATED
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+    serializer = HomestaySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save( hostID=request.user)  
+        imgames = request.FILES.getlist('images')
+        for image in imgames:
+            HomestayImage.objects.create(homestay=serializer.instance, image=image)
+        return Response(
+            {
+                'message': 'Homestay created successfully!',
+                'data': serializer.data
+            },
+            status=status.HTTP_201_CREATED
+        )
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 # PUT Update Homestay API View
 @csrf_exempt
-@api_view(['PUT'])
+@api_view(['PATCH'])
 @permission_classes([IsAuthenticated, IsHost])
+@parser_classes([MultiPartParser, FormParser])
 def update_homestay_api(request, homestay_id):
     try:
         homestay = Homestays.objects.get(HomestayID=homestay_id, hostID=request.user)
     except Homestays.DoesNotExist:
         return Response({'error': 'Homestay not found.'}, status=status.HTTP_404_NOT_FOUND)
-    serialaizer = HomestaySerializer(homestay, data=request.data)
+    serialaizer = HomestaySerializer(homestay, data=request.data, partial=True) # partial=True để chỉ cập nhật một phần
     if serialaizer.is_valid():
         serialaizer.save()
+        images = request.FILES.getlist('images')
+        for image in images:
+            HomestayImage.objects.create(homestay=homestay, image=image)
         return Response(
             {
                     'message': 'Homestay updated successfully!',
@@ -84,3 +95,4 @@ def delete_homestay_api(request, homestay_id):
         return Response({'error': 'Homestay not found.'}, status=status.HTTP_404_NOT_FOUND)
     homestay.delete()
     return Response({'message': 'Homestay deleted successfully!'}, status=status.HTTP_200_OK)
+
