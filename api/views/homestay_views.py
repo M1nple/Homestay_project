@@ -1,3 +1,4 @@
+from email.mime import image
 from rest_framework.decorators import api_view, permission_classes, parser_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -6,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.views.decorators.csrf import csrf_exempt
 from api.serializers.homestay_serializer import HomestaySerializer
+from django.shortcuts import get_object_or_404
 
 
 
@@ -35,7 +37,7 @@ def get_homestay_details_api(request, homestay_id):
     try:
         homestay = Homestays.objects.get(HomestayID=homestay_id)
     except Homestays.DoesNotExist:
-        return Response({'error': 'Homestay not found.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'không tìm thấy homestay.'}, status=status.HTTP_404_NOT_FOUND)
     serializer = HomestaySerializer(homestay)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -53,7 +55,7 @@ def create_homestay_api(request):
             HomestayImage.objects.create(homestay=serializer.instance, image=image)
         return Response(
             {
-                'message': 'Homestay created successfully!',
+                'message': 'Tạo homestay thành công!',
                 'data': serializer.data
             },
             status=status.HTTP_201_CREATED
@@ -69,7 +71,7 @@ def update_homestay_api(request, homestay_id):
     try:
         homestay = Homestays.objects.get(HomestayID=homestay_id, hostID=request.user)
     except Homestays.DoesNotExist:
-        return Response({'error': 'Homestay not found.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'không tìm thấy homestay.'}, status=status.HTTP_404_NOT_FOUND)
     serialaizer = HomestaySerializer(homestay, data=request.data, partial=True) # partial=True để chỉ cập nhật một phần
     if serialaizer.is_valid():
         serialaizer.save()
@@ -78,7 +80,7 @@ def update_homestay_api(request, homestay_id):
             HomestayImage.objects.create(homestay=homestay, image=image)
         return Response(
             {
-                    'message': 'Homestay updated successfully!',
+                    'message': 'Câp nhật homestay thành công!',
                     'data': serialaizer.data
                 },
                 status=status.HTTP_200_OK
@@ -92,7 +94,15 @@ def delete_homestay_api(request, homestay_id):
     try:
         homestay = Homestays.objects.get(HomestayID=homestay_id, hostID=request.user)
     except Homestays.DoesNotExist:
-        return Response({'error': 'Homestay not found.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'không tìm thấy homestay.'}, status=status.HTTP_404_NOT_FOUND)
     homestay.delete()
-    return Response({'message': 'Homestay deleted successfully!'}, status=status.HTTP_200_OK)
+    return Response({'message': 'Xóa thành công!'}, status=status.HTTP_200_OK)
+
+# DELETE Homestay Image API View
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated, IsHost])
+def delete_homestay_image_api(request, image_id):
+    image = get_object_or_404(HomestayImage, id=image_id, homestay__hostID=request.user)
+    image.delete()
+    return Response({'message': 'Xóa ảnh thành công!'}, status=status.HTTP_200_OK)
 

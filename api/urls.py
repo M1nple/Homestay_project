@@ -5,9 +5,17 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 urlpatterns = [
-    # Authentication URLs
+    # Admin URLs 
+    path('admin/host_request/<int:request_id>/approve/', views.approve_host_request_api, name='approve_host_request_api'),
+    path('admin/host_request/<int:request_id>/reject/', views.reject_host_request_api, name='reject_host_request_api'), 
+
+    # Auth URLs
     path('auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/logout/', views.logout_api, name='logout_api'),
+    path('auth/register/', views.register_api, name='register_api'),
+    path('auth/host/request/', views.host_request_api, name='host_request_api'),
+
     # Homestay URLs
     path('homestay/create/', views.create_homestay_api, name='create_homestay_api'),
     path('homestay/', views.get_all_homestays_api, name='get_all_homestays_api'),
@@ -15,6 +23,8 @@ urlpatterns = [
     path('homestay/update/<int:homestay_id>/', views.update_homestay_api, name='update_homestay_api'),
     path('homestay/delete/<int:homestay_id>/', views.delete_homestay_api, name='delete_homestay_api'),
     path('homestay/host/', views.get_host_homestays_api, name='get_host_homestays_api'),
+    path('homestay/image/delete/<int:image_id>/', views.delete_homestay_image_api, name='delete_homestay_image_api'),
+
     # Room URLs
     path('room/create/<int:homestay_id>/', views.create_room_api, name='create_room_api'),
     path('room/<int:homestay_id>/', views.get_room_by_homestay_api, name='get_room_by_homestay_api'),
@@ -34,6 +44,7 @@ urlpatterns = [
     path('booking/customer/', views.get_customer_bookings_api, name='get_customer_bookings_api'),
     path('booking/update/<int:booking_id>/', views.update_booking_api, name='update_booking_api'),
     path('booking/cancel/<int:booking_id>/', views.cancel_booking_api, name='cancel_booking_api'),
+
     # Booking management by Host
     path('booking/<int:booking_id>/accept/', views.accept_booking_api, name='accept_booking_api'),
     path('booking/<int:booking_id>/reject/', views.reject_booking_api, name='reject_booking_api'),

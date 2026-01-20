@@ -55,3 +55,18 @@ class RoomAdmin(admin.ModelAdmin):
         'status',
         'homestay',
     )
+
+@admin.register(HomestayImage)
+class HomestayImageAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'homestay',
+        'image',
+        'uploaded_at',
+    )
+    search_fields = (
+        'homestay__name',
+    )
+    list_filter = (
+        'uploaded_at',
+    )

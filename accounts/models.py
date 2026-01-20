@@ -29,7 +29,7 @@ class User(AbstractUser):
     )
 
 
-class   HostRequest(models.Model):
+class HostRequest(models.Model):
     STATUS_CHOICES = (
         ('PENDING', 'Pending'),
         ('APPROVED', 'Approved'),

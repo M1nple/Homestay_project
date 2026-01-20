@@ -22,7 +22,7 @@ def user_detail_api(request, user_id):
     try:
         user = User.objects.get(id=user_id)
     except User.DoesNotExist:
-        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Người dùng không tồn tại'}, status=status.HTTP_404_NOT_FOUND)
     serializer = UserDetailSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -33,7 +33,7 @@ def update_user_api(request, user_id):
     try:
         user = User.objects.get(id=user_id)
     except User.DoesNotExist:
-        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Người dùng không tồn tại'}, status=status.HTTP_404_NOT_FOUND)
     
     serializer = UserDetailSerializer(user, data=request.data, partial=True)
     if serializer.is_valid():
@@ -48,11 +48,11 @@ def delete_user_api(request, user_id):
     try:
         user = User.objects.get(id=user_id)
     except User.DoesNotExist:
-        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Người dùng không tồn tại'}, status=status.HTTP_404_NOT_FOUND)
     user.delete()
     return Response(
         {
-            'message': 'User deleted successfully!'
+            'message': 'Người dùng đã được xóa thành công!'
         },
         status=status.HTTP_200_OK
     )
