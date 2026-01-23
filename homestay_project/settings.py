@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
 ]
 
 AUTH_USER_MODEL = 'accounts.User' # thêm dòng này để sử dụng custom user model nếu khoongg sẽ dùng default user model
@@ -170,6 +171,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.AllowAny'
     ],
 }
 # Cấu hình Simple JWT

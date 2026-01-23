@@ -6,7 +6,7 @@ from homestays.models import Homestays, HomestayImage
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.views.decorators.csrf import csrf_exempt
-from api.serializers.homestay_serializer import HomestaySerializer
+from  homestay_project.homestays.serializers.homestay_serializer import HomestaySerializer
 from django.shortcuts import get_object_or_404
 
 
@@ -22,13 +22,7 @@ def get_all_homestays_api(request):
     serialaizer = HomestaySerializer(homestay, many=True)
     return Response(serialaizer.data, status=status.HTTP_200_OK)
 
-# GET Host Homestays API View
-@api_view(['GET'])
-@permission_classes([IsAuthenticated, IsHost])
-def get_host_homestays_api(request):
-    homestays = Homestays.objects.filter(hostID=request.user)
-    serializer = HomestaySerializer(homestays, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 # GET Homestay Details API View
 @api_view(['GET'])
@@ -41,6 +35,15 @@ def get_homestay_details_api(request, homestay_id):
     serializer = HomestaySerializer(homestay)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+# GET Host Homestays API View
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsHost])
+def get_host_homestays_api(request):
+    homestays = Homestays.objects.filter(hostID=request.user)
+    serializer = HomestaySerializer(homestays, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 # Create Homestay API View
 @csrf_exempt
 @api_view(['POST'])
@@ -50,8 +53,8 @@ def create_homestay_api(request):
     serializer = HomestaySerializer(data=request.data)
     if serializer.is_valid():
         serializer.save( hostID=request.user)  
-        imgames = request.FILES.getlist('images')
-        for image in imgames:
+        images = request.FILES.getlist('images')
+        for image in images:
             HomestayImage.objects.create(homestay=serializer.instance, image=image)
         return Response(
             {

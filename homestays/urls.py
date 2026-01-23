@@ -1,20 +1,29 @@
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views.public.rooms_views import PublicRoomViewSet
+from .views.host.rooms_views import HostRoomViewSet
+from .views.host.homestay_views import HostHomestayViewSet
+
+# public router
+public_router = DefaultRouter()
+public_router.register(r'rooms', PublicRoomViewSet, basename= 'public-rooms')
+
+# host router
+host_router = DefaultRouter()
+host_router.register(r'rooms', HostRoomViewSet, basename= 'host-rooms')
+host_router.register(r'homestays',HostHomestayViewSet, basename= 'host-homestays' )
 
 urlpatterns = [
-    # path('', views.index, name='index'),
-    path('home/', views.home, name='home'),
-    path('ajax/load-districts/', views.load_districts, name='ajax_load_districts'),
-    path('ajax/load-wards/', views.load_wards, name='ajax_load_wards'),
     # 
-    path('host/homestay/create/', views.create_homestay, name='create_homestay'),
-    path('host/homestay/update/<int:homestay_id>/', views.update_homestays, name='update_homestays'),
-    path('host/homestay/', views.host_homestay_list, name='my_homestay'),
-    path('host/homestay/delete/image/<int:image_id>/', views.delete_image, name='delete_image'),
-    path('host/homestay/delete/<int:homestay_id>/', views.delete_homestay, name='delete_homestay'),
-    path('host/room/create/<int:homestay_id>/', views.create_room, name='create_room'),
-    path('host/room/update/<int:room_id>/', views.update_room, name='update_room'),
-    path('host/room/delete/<int:room_id>/', views.delete_room, name='delete_room'),
+    path('', include(public_router.urls)),
+
     # 
-    path('homestay/<int:homestay_id>/', views.detail_homestay, name='detail_homestay'),
-    ]
+    path('host/', include(host_router.urls)),
+
+    # create room
+    path('host/homestays/<int:homestay_id>/rooms/', 
+        HostRoomViewSet.as_view({'post':'create'}), 
+        name= 'host-create-room'
+        ),
+
+]

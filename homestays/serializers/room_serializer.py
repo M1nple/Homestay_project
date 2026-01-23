@@ -13,3 +13,5 @@ class RoomSerializer(serializers.ModelSerializer):
             'price_per_night',
             'status'
         ]
+        read_only_fields = ['id', 'status']
+        

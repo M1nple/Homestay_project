@@ -1,4 +1,5 @@
 from rest_framework.permissions import BasePermission
+
 class IsAdmin(BasePermission):
     def has_permission(self, request, view):
         return(
@@ -10,6 +11,8 @@ class IsAdmin(BasePermission):
 
 class IsHost(BasePermission):
     def has_permission(self, request, view):
+        print("USER:", request.user)
+        print("ROLE:", request.user.role)
         return(
             request.user 
             and request.user.is_authenticated 

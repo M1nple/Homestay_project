@@ -1,13 +1,13 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
 
 urlpatterns = [
     # path('', views.index, name='index'),
-    path('user/register/', views.user_register, name='user_register'),
-    path('host/request/', views.host_request, name='host_request'),
-    path('login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='logout'),
+    path('login/', TokenObtainPairView.as_view(), name='login'),
+    path('refresh/', TokenRefreshView.as_view(), name='refresh'),
+
 
     # Password reset URLs for built-in views
     path('password_reset/', 

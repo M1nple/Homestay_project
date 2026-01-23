@@ -25,10 +25,11 @@ def redirect_home(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # path('api/', include('api.urls')),
     path('', redirect_home),  # redirect root URL to home
     path('homestays/', include('homestays.urls')),
-    path('accounts/', include('accounts.urls')),
-    path('api/', include('api.urls')),
+    path('api/auth/', include('accounts.urls')),
+    path('api/', include('homestays.urls')),
 ]
 
 if settings.DEBUG:
