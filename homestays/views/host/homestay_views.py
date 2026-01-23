@@ -1,4 +1,7 @@
+from email.mime import image
 from turtle import home
+from rest_framework import status
+
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -42,10 +45,32 @@ class HostHomestayViewSet(ModelViewSet):
         if homestay.hostID != self.request.user:
             raise PermissionDenied ("bạn không có quyền sửa homestay này")
         serializer.save()
+        images = self.request.FILES.getlist('images')
+        for image in images:
+            HomestayImage.objects.create(
+                homestay = homestay, 
+                image = image
+            )
 
-    # delete
+    # delete homestay
     def perform_destroy(self, instance):
         if instance.hostID != self.request.user:
             raise PermissionDenied("Bạn không có quyên xóa homestay này")
         instance.delete()
         
+
+class HostHomestayImageViewSet(ModelViewSet):
+    queryset = HomestayImage.objects.all()
+    permission_classes = [IsAuthenticated, IsHost]
+    def destroy(self, request, *args, **kwargs):
+        image = self.get_object()
+        if image.homestay.hostID != self.request.user:
+            raise PermissionDenied('Bạn không có quyền xóa ảnh này')
+        # xoa file vật lý
+        image.image.delete(save = False)
+        # xóa file trong db
+        image.delete()
+        return Response(
+            {'message' : 'Xóa ảnh thành công'},
+            status= status.HTTP_200_OK
+        )

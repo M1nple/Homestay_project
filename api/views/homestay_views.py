@@ -36,7 +36,7 @@ def get_homestay_details_api(request, homestay_id):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# GET Host Homestays API View
+# GET Host Homestays API View 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, IsHost])
 def get_host_homestays_api(request):
