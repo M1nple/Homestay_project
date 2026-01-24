@@ -10,7 +10,7 @@ from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 
-from api.permissions import IsAdmin, IsHost
+from homestay_project.accounts.permissions import IsAdmin, IsHost
 
 # ADMIN or HOST
 # GET All Bookings API View by Admin or Host

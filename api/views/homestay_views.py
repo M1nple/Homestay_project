@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 
 
 
-from api.permissions import IsHost
+from homestay_project.accounts.permissions import IsHost
 
 
 # GET All Homestays API View

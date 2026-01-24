@@ -1,10 +1,30 @@
-from django.urls import path
+from atexit import register
+from urllib import request
+from django.db import router
+from django.urls import include, path
 from django.contrib.auth import views as auth_views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
+from rest_framework.routers import DefaultRouter
+from accounts.views.auth_views import AuthViewSet, HostRequestViewSet
+from accounts.views.admin_views import AdminViewSet
+
+
+
+router = DefaultRouter()
+router.register(r'register', AuthViewSet, basename='register')
+
+request_router = DefaultRouter()
+request_router.register(r'request', HostRequestViewSet, basename= 'host-request')
+
+admin_router = DefaultRouter()
+admin_router.register(r'host-requests', AdminViewSet, basename= 'admin')
 
 urlpatterns = [
-    # path('', views.index, name='index'),
+    path('', include(router.urls)),
+    path('host/', include(request_router.urls)),
+    path('admin/', include(admin_router.urls)),
+    
     path('login/', TokenObtainPairView.as_view(), name='login'),
     path('refresh/', TokenRefreshView.as_view(), name='refresh'),
 
@@ -35,6 +55,4 @@ urlpatterns = [
         name='password_reset_complete'
     ),
 
-    # path('host/pending/', host_pending_view, name='host_pending'),
-    # path('host/dashboard/', host_dashboard, name='host_dashboard'),
-]
+]   

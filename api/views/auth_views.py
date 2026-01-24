@@ -3,9 +3,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
-from api.serializers.auth_serializer import RegisterSerializer, HostRequestSerializer
+from homestay_project.accounts.serializer import RegisterSerializer, HostRequestSerializer
 from accounts.models import HostRequest
-from api.permissions import IsAdmin
+from homestay_project.accounts.permissions import IsAdmin
 from django.utils import timezone 
 
 # login API View map thằng TokenObtainPairView của thư viện djangorestframework-simplejwt

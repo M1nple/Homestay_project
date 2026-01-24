@@ -10,13 +10,13 @@ from homestays.models import HomestayImage, Room, Homestays
 from rest_framework.permissions import IsAuthenticated
 from homestays.serializers.homestay_serializer import HomestaySerializer
 from rest_framework.viewsets import ModelViewSet
-from api.permissions import IsHost
+from accounts.permissions import IsHost
 
 
 class HostHomestayViewSet(ModelViewSet):
     serializer_class = HomestaySerializer
     permission_classes = [IsAuthenticated, IsHost]
-    parser_classes = [MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser]   
 
     def get_queryset(self):
         return Homestays.objects.filter(hostID = self.request.user)

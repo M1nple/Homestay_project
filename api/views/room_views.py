@@ -14,7 +14,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from api.serializers.room_serializer import RoomSerializer
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from api.permissions import IsHost
+from homestay_project.accounts.permissions import IsHost
 
 
 

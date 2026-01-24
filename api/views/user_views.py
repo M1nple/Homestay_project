@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from api.serializers.user_serializer import UserSerializer, UserDetailSerializer
 from accounts.models import User
-from api.permissions import IsAdmin
+from homestay_project.accounts.permissions import IsAdmin
 
 # GET List Users API View
 @api_view(['GET'])

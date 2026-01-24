@@ -8,7 +8,7 @@ from homestays.models import Room, Homestays
 from rest_framework.permissions import IsAuthenticated
 from homestays.serializers.room_serializer import RoomSerializer
 from rest_framework.viewsets import ModelViewSet
-from api.permissions import IsHost
+from accounts.permissions import IsHost
 
 class HostRoomViewSet(ModelViewSet):
     serializer_class = RoomSerializer
