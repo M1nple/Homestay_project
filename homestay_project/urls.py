@@ -20,8 +20,6 @@ from django.shortcuts import redirect
 from django.conf import settings
 from django.conf.urls.static import static
 
-# from homestay_project import accounts
-
 def redirect_home(request):
     return redirect('home') # tạo một view để redirect đến trang home
 
@@ -29,8 +27,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', redirect_home),  # redirect root URL to home
     path('api/auth/', include('accounts.urls')),
-    path('api/', include('accounts.urls')), 
+    # path('api/', include('accounts.urls')), 
     path('api/', include('homestays.urls')),
+    path('api/', include('booking.urls'))
 ]
 
 if settings.DEBUG:

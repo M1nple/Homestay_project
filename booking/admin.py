@@ -10,6 +10,7 @@ admin.site.site_title = "Homestay Admin Portal"
 class BookingAdmin(admin.ModelAdmin):
     list_display = (
         'id',
+        'user',
         'checkin_date',
         'checkout_date',
         'guests',
@@ -19,5 +20,5 @@ class BookingAdmin(admin.ModelAdmin):
     )
     search_fields = (
     )
-    list_filter = (
+    list_filter = ("status",
     )

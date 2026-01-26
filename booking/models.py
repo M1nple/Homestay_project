@@ -1,8 +1,8 @@
 from django.db import models
 
 class Booking(models.Model):
-    user_id = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
-    room_id = models.ForeignKey('homestays.Room', on_delete=models.CASCADE)
+    user = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
+    room = models.ForeignKey('homestays.Room', on_delete=models.CASCADE)
     checkin_date = models.DateField()
     checkout_date = models.DateField()
     guests = models.IntegerField()
@@ -14,3 +14,5 @@ class Booking(models.Model):
     )
     status = models.CharField(max_length=20, choices=START_CHOICES, default='PENDING')
     created_at = models.DateTimeField(auto_now_add=True)
+    cancelled_at = models.DateTimeField(null= True, blank= True)
+    confirm_at =  models.DateTimeField(null= True, blank= True)

@@ -1,12 +1,8 @@
-from email.mime import image
-from turtle import home
 from rest_framework import status
-
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import MultiPartParser, FormParser
-# from homestay_project.api import serializer
-from homestays.models import HomestayImage, Room, Homestays
+from homestays.models import HomestayImage, Homestays
 from rest_framework.permissions import IsAuthenticated
 from homestays.serializers.homestay_serializer import HomestaySerializer
 from rest_framework.viewsets import ModelViewSet

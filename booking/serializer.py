@@ -1,20 +1,24 @@
 from rest_framework import serializers
 from booking.models import Booking
 
-class BookingCreateSerializer(serializers.ModelSerializer):
+class CustomerBookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
         fields = [
+            'id',
+            'room',
             'checkin_date',
             'checkout_date',
             'guests',
-            'created_at'
+            'created_at',
+            'status'
         ]
+
     def validate(self, data):
         checkin = data.get('checkin_date')
         checkout = data.get('checkout_date')
         guests = data.get('guests')
-        room = self.context['room']
+        room = data['room']
 
         # kiểm tra ngày nhận và ngày trả
         if checkin and checkout and checkout <= checkin:
@@ -26,22 +30,22 @@ class BookingCreateSerializer(serializers.ModelSerializer):
         
         # kiểm tra trùng lịch đặt phòng
         if checkin and checkout:
-            exists = Booking.objects.filter( 
-                room_id=room,
+            conflict  = Booking.objects.filter( 
+                room=room,
                 status__in=['CONFIRMED'],
                 checkin_date__lt=checkout, # LT = less than (<) 
                 checkout_date__gt=checkin # GT = greater than (>) kiểm tra giao nhau của hai khoảng thời gian với nhau trong database và yêu cầu mới tạo
             ).exists()
-            if exists:
+            if conflict:
                 raise serializers.ValidationError("Phòng đã được đặt trong khoảng thời gian này.")
         return data
     
     def create(self, validated_data):
-        room = self.context['room']
         user = self.context['request'].user
+        room = validated_data['room']
         days = (validated_data['checkout_date'] - validated_data['checkin_date']).days
         total_price = days * room.price_per_night
-        return Booking.objects.create(user_id = user, room_id = room, total_price=total_price, **validated_data)
+        return Booking.objects.create(user = user, total_price=total_price, **validated_data)
     
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
