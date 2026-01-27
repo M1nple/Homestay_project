@@ -4,10 +4,11 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from accounts.models import HostRequest, HostProfile
+from accounts.models import HostRequest, HostProfile, User
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from accounts.permissions import IsAdmin
+from accounts.serializer import AdminSerializer
 
 
 class AdminViewSet(GenericViewSet):
@@ -70,3 +71,12 @@ class AdminViewSet(GenericViewSet):
             {'message': 'Yêu cầu trở thành host đã bị từ chối'},
             status=status.HTTP_200_OK
         )
+
+
+class UserViewSet(ModelViewSet):
+    serializer_class = AdminSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]
+    
+    def get_queryset(self):
+        return User.objects.all()
+    

@@ -1,3 +1,5 @@
+from dataclasses import field
+from pyexpat import model
 from rest_framework import serializers
 from accounts.models import *
 from rest_framework.response import Response
@@ -41,4 +43,9 @@ class HostRequestSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         host_request = HostRequest.objects.create(user=user, **validated_data)
         return host_request
+    
+class AdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields  = '__all__'
     

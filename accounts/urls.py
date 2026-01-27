@@ -7,7 +7,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
 from rest_framework.routers import DefaultRouter
 from accounts.views.auth_views import AuthViewSet, HostRequestViewSet
-from accounts.views.admin_views import AdminViewSet
+from accounts.views.admin_views import AdminViewSet, UserViewSet
 
 
 
@@ -19,6 +19,7 @@ request_router.register(r'request', HostRequestViewSet, basename= 'host-request'
 
 admin_router = DefaultRouter()
 admin_router.register(r'host-requests', AdminViewSet, basename= 'admin')
+admin_router.register(r'user', UserViewSet, basename= 'admin-user')
 
 urlpatterns = [
     path('', include(router.urls)),
