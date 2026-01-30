@@ -1,23 +1,30 @@
+from turtle import reset
 from django.utils import timezone
 from rest_framework import status
+import rest_framework
 from rest_framework.decorators import action
+import rest_framework.mixins
 from rest_framework.response import Response
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from accounts.models import HostRequest, HostProfile, User
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.mixins import ListModelMixin
 from accounts.permissions import IsAdmin
-from accounts.serializer import AdminSerializer
+from accounts.serializer import AdminSerializer, HostRequestSerializer
 
 
-class AdminViewSet(GenericViewSet):
+class AdminViewSet(GenericViewSet, ListModelMixin):
+    serializer_class = HostRequestSerializer
     permission_classes = [IsAuthenticated, IsAdmin]
     queryset = HostRequest.objects.all()
 
+    # def get_queryset(self):
+    #     return HostRequest.objects.all()
+
     @action(detail= True, methods=['post'], url_path= 'approve')
     @transaction.atomic
-
     def approve(self, request, pk = None):
         host_request = self.get_object()
         host_request = get_object_or_404(HostRequest, pk = pk, status = 'PENDING')
@@ -73,7 +80,7 @@ class AdminViewSet(GenericViewSet):
         )
 
 
-class UserViewSet(ModelViewSet):
+class UserViewSet(GenericViewSet, ListModelMixin):
     serializer_class = AdminSerializer
     permission_classes = [IsAuthenticated, IsAdmin]
     

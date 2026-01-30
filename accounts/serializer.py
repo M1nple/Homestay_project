@@ -30,7 +30,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class HostRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = HostRequest
-        fields = ('citizen_id_number', 'bank_account', 'address', 'note')
+        fields = ('id','citizen_id_number', 'bank_account', 'address','status','created_at', 'reviewed_at', 'note')
 
 # validate_<field_name>() chỉ kiểm tra 1 field cụ thể
 # validate(self, attrs) kiểm tra cả object

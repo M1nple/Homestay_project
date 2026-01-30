@@ -49,7 +49,7 @@ class HostHomestayViewSet(ModelViewSet):
             )
 
     # delete homestay
-    def perform_destroy(self, instance):
+    def perform_destroy(self, instance): #perform_destroy() trong DRF KHÔNG dùng để trả Response nên kh return message
         if instance.hostID != self.request.user:
             raise PermissionDenied("Bạn không có quyên xóa homestay này")
         instance.delete()
@@ -58,7 +58,7 @@ class HostHomestayViewSet(ModelViewSet):
 class HostHomestayImageViewSet(ModelViewSet):
     queryset = HomestayImage.objects.all()
     permission_classes = [IsAuthenticated, IsHost]
-    def destroy(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs): # override perform_destroy nên có thế return message
         image = self.get_object()
         if image.homestay.hostID != self.request.user:
             raise PermissionDenied('Bạn không có quyền xóa ảnh này')

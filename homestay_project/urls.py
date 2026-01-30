@@ -26,8 +26,7 @@ def redirect_home(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', redirect_home),  # redirect root URL to home
-    path('api/auth/', include('accounts.urls')),
-    # path('api/', include('accounts.urls')), 
+    path('api/', include('accounts.urls')), 
     path('api/', include('homestays.urls')),
     path('api/', include('booking.urls'))
 ]

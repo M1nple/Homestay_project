@@ -42,7 +42,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'api',
     'rest_framework',
     'homestays',
     'accounts',
