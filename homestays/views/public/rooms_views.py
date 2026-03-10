@@ -12,6 +12,13 @@ class PublicRoomViewSet(ReadOnlyModelViewSet):
     serializer_class = RoomSerializer
     permission_classes = [AllowAny]
 
+    # def get_queryset(self):
+        # homestay_id = self.kwargs.get('homestay_id')
+        # return Room.objects.filter(
+        #     homestay = homestay_id,
+        #     status='AVAILABLE'
+        # )
+    
     # PUBLIC – khách xem phòng
     def get_queryset(self):
         return Room.objects.filter(status=Room.RoomStatus.AVAILABLE)
@@ -26,11 +33,30 @@ class PublicRoomViewSet(ReadOnlyModelViewSet):
         rooms = Room.objects.filter(status = Room.RoomStatus.AVAILABLE)
 
         # loc theo so luong khach 
-        if guests: 
+        if guests is not None: 
+            try:
+                guests = int(guests)
+            except ValueError:
+                 return Response(
+                    {'error': 'số khách phải là số nguyên'},
+                        status= status.HTTP_400_BAD_REQUEST
+                )
+            if guests <= 0:
+                return Response(
+                    {'error': 'số khách phải lớn hơn 0'},
+                        status= status.HTTP_400_BAD_REQUEST
+                )
             rooms = rooms.filter(max_guests__gte=int(guests)) # gte Greater Than or Equal (lon hon hoac bang)
+
+
 
         # loc theo thoi gian 
         if checkin and checkout:
+            if checkout < checkin:
+                return Response(
+                        {'error': 'Ngày checkout phải sau ngày checkin'},
+                            status= status.HTTP_400_BAD_REQUEST
+                    )
             try:
                 checkin = datetime.strptime(checkin, '%Y-%m-%d').date()
                 checkout = datetime.strptime(checkout, '%Y-%m-%d').date()

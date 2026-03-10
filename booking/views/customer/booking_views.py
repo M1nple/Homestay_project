@@ -11,9 +11,6 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import CreateModelMixin
 
 
-
-
-
 class CustomerBookingViewSet(ModelViewSet):
     serializer_class = CustomerBookingSerializer
     permission_classes = [IsAuthenticated]

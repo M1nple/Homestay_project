@@ -12,7 +12,6 @@ class User(AbstractUser):
         ('HOST', 'Host'),
         ('ADMIN', 'Admin'),
     )
-
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='CUSTOMER')
     phone = models.CharField(max_length=15, blank=True)
 
@@ -27,7 +26,6 @@ class User(AbstractUser):
         related_name='accounts_user_permissions_set',
         blank=True,
     )
-
 
 class HostRequest(models.Model):
     STATUS_CHOICES = (

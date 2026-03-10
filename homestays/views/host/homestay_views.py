@@ -1,3 +1,4 @@
+from turtle import home
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
@@ -7,6 +8,8 @@ from rest_framework.permissions import IsAuthenticated
 from homestays.serializers.homestay_serializer import HomestaySerializer
 from rest_framework.viewsets import ModelViewSet
 from accounts.permissions import IsHost
+from booking.models import Booking
+from django.forms import ValidationError
 
 
 class HostHomestayViewSet(ModelViewSet):
@@ -16,12 +19,6 @@ class HostHomestayViewSet(ModelViewSet):
 
     def get_queryset(self):
         return Homestays.objects.filter(hostID = self.request.user)
-    
-    # Host get homestay
-    def my_homestay(sefl, request):
-        homestays = Homestays.objects.filter(hostID = request.user)
-        serializer = sefl.get_serializer(homestays, many = True)
-        return Response(serializer.data)
     
     # create
     def perform_create(self, serializer):
@@ -37,10 +34,8 @@ class HostHomestayViewSet(ModelViewSet):
 
     # update
     def perform_update(self, serializer):
-        homestay = self.get_object()
-        if homestay.hostID != self.request.user:
-            raise PermissionDenied ("bạn không có quyền sửa homestay này")
-        serializer.save()
+ 
+        homestay = serializer.save()
         images = self.request.FILES.getlist('images')
         for image in images:
             HomestayImage.objects.create(
@@ -50,10 +45,19 @@ class HostHomestayViewSet(ModelViewSet):
 
     # delete homestay
     def perform_destroy(self, instance): #perform_destroy() trong DRF KHÔNG dùng để trả Response nên kh return message
+        has_booking = Booking.objects.filter(
+            room__homestay=instance,
+            status__in=['PENDING', 'CONFIRMED', 'PAID']
+        ).exists()
+
+        if has_booking:
+            raise ValidationError(
+                "Không thể xóa homestay vì đang có booking."
+            )
         if instance.hostID != self.request.user:
             raise PermissionDenied("Bạn không có quyên xóa homestay này")
-        instance.delete()
         
+        instance.delete()     
 
 class HostHomestayImageViewSet(ModelViewSet):
     queryset = HomestayImage.objects.all()

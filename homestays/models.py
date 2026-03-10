@@ -25,7 +25,6 @@ class Ward(models.Model):
     def __str__(self):
         return self.name
 
-
 class Homestays(models.Model):
     HomestayID = models.AutoField(primary_key=True)
     hostID = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role': 'HOST'}, null=True, blank=True)
@@ -44,7 +43,6 @@ class Homestays(models.Model):
     def __str__(self):
         return self.name
 
-
 class HomestayImage(models.Model):
     homestay = models.ForeignKey(Homestays, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='homestay_project/homestays/media/homestays/images')
@@ -53,7 +51,6 @@ class HomestayImage(models.Model):
     def __str__(self):
         return f"Image for {self.homestay.name}"
     
-
 class Room(models.Model):
     class RoomStatus(models.TextChoices):
         AVAILABLE = 'available', 'Available'

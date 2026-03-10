@@ -22,6 +22,12 @@ urlpatterns = [
     # Public
     path('', include(public_router.urls)),
 
+    # path(
+    # 'homestays/<int:homestay_id>/rooms/',
+    # PublicRoomViewSet.as_view({'get': 'list'}),
+    # name='public-homestay-rooms'
+    # ),
+
     # Host
     path('host/', include(host_router.urls)),
 

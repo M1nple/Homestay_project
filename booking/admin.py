@@ -21,4 +21,4 @@ class BookingAdmin(admin.ModelAdmin):
     search_fields = (
     )
     list_filter = ("status",
-    )
+    )   

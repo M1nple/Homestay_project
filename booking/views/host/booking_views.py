@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from booking.serializer import BookingSerializer
 from rest_framework.viewsets import ModelViewSet
 from booking.models import Booking
-from accounts.permissions import IsHost
+from accounts.permissions import IsHost, IsAdmin
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response

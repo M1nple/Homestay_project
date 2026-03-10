@@ -1,5 +1,6 @@
 from email import message
 from urllib import response
+from django.forms import ValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -9,6 +10,9 @@ from rest_framework.permissions import IsAuthenticated
 from homestays.serializers.room_serializer import RoomSerializer
 from rest_framework.viewsets import ModelViewSet
 from accounts.permissions import IsHost
+from django.db import transaction
+from rest_framework import status
+
 
 class HostRoomViewSet(ModelViewSet):
     serializer_class = RoomSerializer
@@ -29,14 +33,18 @@ class HostRoomViewSet(ModelViewSet):
     # cập nhật phòng
     def perform_update(self, serializer):
         room = self.get_object()
-        if room.homestay.hostID != self.request.user:
-            raise PermissionDenied("bạn không có quyền sửa phòng này")
         serializer.save()
+
     
     # xóa phòng
     def perform_destroy(self, instance):
-        if instance.homestay.hostID != self.request.user:
-            raise PermissionDenied("Bạn không có quyên xóa phòng này")
+        has_booking = instance.booking_set.filter(
+            status__in=['PENDING', 'CONFIRMED', 'PAID']
+        ).exists()
+        if has_booking:
+            raise ValidationError(
+                "Không thể xóa phòng vì đang có booking."
+            )
         instance.delete()
 
 

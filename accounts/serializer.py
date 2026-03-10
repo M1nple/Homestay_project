@@ -1,4 +1,6 @@
 from dataclasses import field
+import email
+from multiprocessing import Value
 from pyexpat import model
 from rest_framework import serializers
 from accounts.models import *
@@ -14,6 +16,11 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'email', 'password', 'first_name', 'last_name', 'phone')
+    
+    def validate_email(self, value):
+        if User.objects.filter(email = value).exists():
+            raise serializers.ValidationError('Email đã được sử dụng')
+        return Value
 
     def create(self, validated_data):
         user = User.objects.create_user(
@@ -30,7 +37,16 @@ class RegisterSerializer(serializers.ModelSerializer):
 class HostRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = HostRequest
-        fields = ('id','citizen_id_number', 'bank_account', 'address','status','created_at', 'reviewed_at', 'note')
+        fields = (
+            'id', 
+            'citizen_id_number', 
+            'bank_account', 
+            'address', 
+            'status', 
+            'created_at', 
+            'reviewed_at', 
+            'note'
+            )
 
 # validate_<field_name>() chỉ kiểm tra 1 field cụ thể
 # validate(self, attrs) kiểm tra cả object
@@ -38,6 +54,22 @@ class HostRequestSerializer(serializers.ModelSerializer):
         if HostProfile.objects.filter(citizen_id_number = value,).exists():
             raise serializers.ValidationError('CCCD đã được sử dụng')
         return value
+
+    def validate(self, data):
+        user = self.context['request'].user
+        # đã có request đang PENDING
+        exists = HostRequest.objects.filter(
+            user=user,
+            status='PENDING'
+        ).exists()
+        if exists:
+            raise serializers.ValidationError(
+                "Bạn đã gửi yêu cầu trở thành host và đang chờ duyệt."
+            )
+        # host request
+        if user.role == 'HOST':
+            raise serializers.ValidationError("bạn đã là host")
+        return data
 
     def create(self, validated_data):
         user = self.context['request'].user
