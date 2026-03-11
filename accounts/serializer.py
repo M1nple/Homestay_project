@@ -8,9 +8,8 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
-
-
 class RegisterSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -20,7 +19,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         if User.objects.filter(email = value).exists():
             raise serializers.ValidationError('Email đã được sử dụng')
-        return Value
+        return value
 
     def create(self, validated_data):
         user = User.objects.create_user(

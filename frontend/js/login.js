@@ -14,7 +14,7 @@ async function login(){
 
         alert("Login success");
 
-        window.location.href = "rooms.html";
+        window.location.href = "home.html";
 
     }catch(error){
 

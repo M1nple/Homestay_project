@@ -1,3 +1,8 @@
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 
@@ -15,39 +20,21 @@
 
 <div class="container mt-4">
 
-<h2 class="mb-3">Homestays</h2>
-
-<!-- Search Input -->
-<input 
-  type="text" 
-  id="search-input" 
-  class="form-control mb-4"
-  placeholder="Search room..."
-  onkeyup="searchRoom()"
->
-
-<div class="row" id="room-list"></div>
-
-</div>
-
-<div class="container mt-4">
-
-<h2 class="mb-4">Available Homestays</h2>
+<h2>My Homestays</h2>
 
 <div class="row" id="homestay-list"></div>
 
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
 <script src="../js/axiosClient.js"></script>
-<script src="../js/home.js"></script>
-<script src="../js/auth.js"></script>
-
 <script src="../js/navbar.js"></script>
+<script src="../js/my-homestay.js"></script>
+
 <script>
 loadNavbar();
+loadMyHomestays();
 </script>
+
 
 </body>
 

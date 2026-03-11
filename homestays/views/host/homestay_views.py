@@ -2,35 +2,40 @@ from turtle import home
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from homestays.models import HomestayImage, Homestays
 from rest_framework.permissions import IsAuthenticated
 from homestays.serializers.homestay_serializer import HomestaySerializer
 from rest_framework.viewsets import ModelViewSet
 from accounts.permissions import IsHost
 from booking.models import Booking
-from django.forms import ValidationError
+from rest_framework.exceptions import ValidationError
 
 
 class HostHomestayViewSet(ModelViewSet):
+    queryset = Homestays.objects.all()
     serializer_class = HomestaySerializer
     permission_classes = [IsAuthenticated, IsHost]
-    parser_classes = [MultiPartParser, FormParser]   
+    parser_classes = [MultiPartParser, FormParser, JSONParser]   
 
     def get_queryset(self):
         return Homestays.objects.filter(hostID = self.request.user)
     
     # create
     def perform_create(self, serializer):
+        print("bắt đ")
         # lưu homestay
         homestay = serializer.save(hostID = self.request.user)
+        print("đã lưu homestay", homestay.HomestayID)
         # lưu ảnh 
         images = self.request.FILES.getlist('images')
+        print("FILES:" , images)
         for image in images:
             HomestayImage.objects.create(
                 homestay = homestay, 
                 image = image
             )
+        print("ok")
 
     # update
     def perform_update(self, serializer):

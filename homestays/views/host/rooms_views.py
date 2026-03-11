@@ -2,7 +2,7 @@ from email import message
 from urllib import response
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import action
+from rest_framework.decorators import action,api_view
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from homestays.models import Room, Homestays
@@ -54,3 +54,14 @@ class HostRoomViewSet(ModelViewSet):
         serializer = self.get_serializer(rooms, many = True)
         return Response(serializer.data)
     
+    @api_view(['GET'])
+    def get_rooms_by_homestay_api(request, homestay_id):
+        rooms = Room.objects.filter(homestay_id=homestay_id)
+
+        serializer = RoomSerializer(rooms, many=True)
+
+        return Response({
+            "homestay_id": homestay_id,
+            "total_rooms": rooms.count(),
+            "rooms": serializer.data
+    })

@@ -8,17 +8,11 @@ from rest_framework.permissions import AllowAny
 from homestays.serializers.room_serializer import RoomSerializer
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
+
 class PublicRoomViewSet(ReadOnlyModelViewSet):
     serializer_class = RoomSerializer
     permission_classes = [AllowAny]
 
-    # def get_queryset(self):
-        # homestay_id = self.kwargs.get('homestay_id')
-        # return Room.objects.filter(
-        #     homestay = homestay_id,
-        #     status='AVAILABLE'
-        # )
-    
     # PUBLIC – khách xem phòng
     def get_queryset(self):
         return Room.objects.filter(status=Room.RoomStatus.AVAILABLE)
@@ -72,3 +66,6 @@ class PublicRoomViewSet(ReadOnlyModelViewSet):
             ).distinct()
         serializer = self.get_serializer(rooms, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+  

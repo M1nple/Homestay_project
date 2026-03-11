@@ -27,9 +27,9 @@ async function loadRooms(){
 
               <p class="card-text">
                 address: ${homestay.address}
-                ward: ${homestay.ward}
-                district: ${homestay.district}
-                city: ${homestay.city}
+                ward: ${homestay.ward_name}
+                district: ${homestay.district_name}
+                city: ${homestay.city_name}
               </p>
 
               <button class="btn btn-primary" onclick="bookRoom(${homestay.HomestayID})">

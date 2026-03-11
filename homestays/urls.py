@@ -1,10 +1,13 @@
 from django.urls import path, include
+from .views.public.locations_views import LocationView
 from rest_framework.routers import DefaultRouter
 
 from .views.public.rooms_views import PublicRoomViewSet
 from .views.public.homestay_views import PublicHomestayViewSet
-from .views.host.rooms_views import HostRoomViewSet
+from .views.host.rooms_views import HostRoomViewSet, HostRoomViewSet
 from .views.host.homestay_views import HostHomestayViewSet, HostHomestayImageViewSet
+from homestays.views.public import rooms_views
+from homestays.views.public import rooms_views
 
 
 # public router
@@ -21,6 +24,12 @@ host_router.register(r'images',HostHomestayImageViewSet, basename= 'host-homesta
 urlpatterns = [ 
     # Public
     path('', include(public_router.urls)),
+    path("locations/", LocationView.as_view()),
+    path(
+        'homestays/<int:homestay_id>/rooms/',
+        HostRoomViewSet.get_rooms_by_homestay_api,
+        name='get_rooms_by_homestay_api'
+    ),
 
     # path(
     # 'homestays/<int:homestay_id>/rooms/',
