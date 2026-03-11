@@ -21,46 +21,35 @@
 <div class="container mt-4">
 
   <div class="mb-3">
-    <label>Tên Homestay</label>
+    <label>Tên phòng</label>
     <input id="name" class="form-control">
   </div>
 
   <div class="mb-3">
-    <label>Địa chỉ</label>
-    <input id="address" class="form-control">
-  </div>
-
-  <div class="mb-3">
-    <label>Thành phố</label>
-    <select id="city" class="form-control"></select>
-  </div>
-
-  <div class="mb-3">c
-    <label>Quận huyện</label>
-    <select id="district" class="form-control"></select>
-  </div>
-
-  <div class="mb-3">
-    <label>Thành phố</label>
-    <select id="ward" class="form-control"></select>
-  </div>
-
-  <div class="mb-3">
-    <label>Giá 1 đêm</label>
-    <input id="price" class="form-control">
+    <label>Mô tả</label>
+    <input id="description" class="form-control">
   </div>
 
   <div class="mb-3">
     <label>Số khách tối đa</label>
     <input id="guests" class="form-control">
   </div>
-
-    <div class="mb-3">
-    <label>Mô tả</label>
-    <input id="description" class="form-control">
+  
+  <div class="mb-3">
+    <label>Giá 1 đêm</label>
+    <input id="price" class="form-control">
   </div>
+  
 
-  <button class="btn btn-primary" onclick="createHomestay()">
+<select id="status" class="form-control mb-3" >
+
+  <option value="available">Available</option>
+  <option value="booked">Booked</option>
+  <option value="maintenance">Maintenance</option>
+
+</select>
+
+  <button class="btn btn-primary" onclick="createRoom()">
     Create
   </button>
 
@@ -71,6 +60,8 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="../js/axiosClient.js"></script>
 <script src="../js/navbar.js"></script>
+<script src="../js/create-room.js"></script>
+
 
 <script>
 loadNavbar();
